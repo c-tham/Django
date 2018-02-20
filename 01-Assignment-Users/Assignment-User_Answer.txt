@@ -1,0 +1,128 @@
+
+1. Create a new model called 'User' with the information above.
+----------------------------------------------------
+(assignment -> apps -> user_login -> models.py)
+class User(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email_address = models.CharField(max_length=255)
+    age = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+----------------------------------------------------
+
+2. Successfully create and run the migration files
+----------------------------------------------------
+*************************************************************
+>python manage.py makemigrations
+Migrations for 'user_login':
+  apps/user_login/migrations/0001_initial.py
+    - Create model User
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions, user_login
+Running migrations:
+  Applying user_login.0001_initial... OK
+*************************************************************
+----------------------------------------------------
+
+3. Using the shell...
+----------------------------------------------------
+python manage.py shell
+>>> from apps.user_login.models import *
+----------------------------------------------------
+
+3.1. Know how to retrieve all users.
+----------------------------------------------------
+>>> User.objects.all()
+<QuerySet []>
+----------------------------------------------------
+
+3.2. Know how to get the last user.
+----------------------------------------------------
+>>> User.objects.last()
+>>>
+----------------------------------------------------
+
+3.3. Create a few records in the users
+----------------------------------------------------
+>>> User.objects.create(first_name="one", last_name="one", age=1, email_address="one@one.com")
+<User: User object>
+>>> User.objects.create(first_name="two", last_name="two", age=2, email_address="two@two.com")
+<User: User object>
+>>> User.objects.create(first_name="three", last_name="three", age=3, email_address="three@three.com")
+<User: User object>
+>>> User.objects.all()
+<QuerySet [<User: User object>, <User: User object>, <User: User object>]>
+>>>
+----------------------------------------------------
+
+3.4. Know how to get the first user.
+----------------------------------------------------
+(assignment -> apps -> user_login -> models.py)
+class User(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email_address = models.CharField(max_length=255)
+    age = models.IntegerField()
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    
+    def __str__(self):
+        return self.first_name
+*************************************************************
+>python manage.py makemigrations
+No changes detected
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions, user_login
+Running migrations:
+  No migrations to apply.
+*************************************************************
+python manage.py shell
+>>> from apps.user_login.models import *
+>>> User.objects.first()
+<User: one>
+----------------------------------------------------
+
+3.5. Know how to get the users sorted by their first name (order by first_name DESC)
+----------------------------------------------------
+>>> User.objects.order_by("first_name")
+<QuerySet [<User: one>, <User: three>, <User: two>]>
+>>>
+>>> User.objects.order_by("-first_name")
+<QuerySet [<User: two>, <User: three>, <User: one>]>
+>>>
+----------------------------------------------------
+
+3.6. Get the record of the user whose id is 3 and UPDATE the person's last_name to something else. Know how to do this directly in the console using .get and .save.
+----------------------------------------------------
+>>> User.objects.all()
+<QuerySet [<User: one>, <User: two>, <User: three>]>
+>>> u = User.objects.get(id=3)
+>>> u.first_name="four"
+>>> User.objects.all()
+<QuerySet [<User: one>, <User: two>, <User: three>]>
+>>> u.save()
+>>> User.objects.all()
+<QuerySet [<User: one>, <User: two>, <User: four>]>
+>>>
+----------------------------------------------------
+
+3.7. Know how to delete a record of a user whose id is 4 (use something like User.objects.get(id=2).delete...).
+----------------------------------------------------
+>>> User.objects.create(first_name="ten", last_name="ten", age=10, email_address="ten@ten.com")
+<User: ten>
+>>> User.objects.all()
+<QuerySet [<User: one>, <User: two>, <User: four>, <User: ten>]>
+>>> User.objects.get(id=4).delete()
+(1, {u'user_login.User': 1})
+>>> User.objects.all()
+<QuerySet [<User: one>, <User: two>, <User: four>]>
+>>>
+----------------------------------------------------
+
+(optional) Ninja:
+4. Find a way to validate the data coming in to the shell.  For example, make sure that "name" fields are a minimum length, "email" is a valid email, or that "email" doesn't already exist in the db.
