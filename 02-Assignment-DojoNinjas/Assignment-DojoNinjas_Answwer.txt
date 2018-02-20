@@ -1,0 +1,230 @@
+==================================================================================================
+1. Start a new app (the name of the app should be 'dojo_ninjas')
+>django-admin startproject assignment
+>mkdir assignment/apps
+>touch assignment/apps/__init__.py
+>python ../manage.py startapp dojo_ninjas
+** Manual add codes below into  assignment/assignment/settings.py
+    'apps.dojo_ninjas', ### added this line!
+
+==================================================================================================
+2. Create appropriate tables/models that allows you to perform tasks such as
+(assignment -> apps -> user_login -> models.py)
+-------------------------------------
+
+class dojos(models.Model):
+    name = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+
+    def __str__(self):
+        return str(self.id)+'-'+self.name+'-'+self.city+'-'+self.state
+
+class ninjas(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    dojo = models.ForeignKey(dojos, related_name="ninjas")
+
+    def __str__(self):
+        return str(self.id)+'-'+self.first_name+'-'+self.last_name+'-'+self.dojo
+
+-------------------------------------
+python manage.py shell
+In [2]: from apps.dojo_ninjas.models import *
+
+In [10]: dojos.objects.create(name="CodingDojo Silicon Valley", city="Mountain View", state="CA")
+Out[10]: <dojos: CodingDojo Silicon Valley-Mountain View-CA>
+
+In [11]: dojos.objects.create(name="CodingDojo Seattle", city="Seattle", state="WA")
+Out[11]: <dojos: CodingDojo Seattle-Seattle-WA>
+
+In [12]: dojos.objects.create(name="CodingDojo New York", city="New York", state="NY")
+Out[12]: <dojos: CodingDojo New York-New York-NY>
+
+In [1]: from apps.dojo_ninjas.models import *
+
+In [2]: dojos.objects.all()
+Out[2]: <QuerySet [<dojos: 1-CodingDojo Silicon Valley-Mountain View-CA>, <dojos: 2-CodingDojo Seattle-Seattle-WA>, <dojos: 3-CodingDojo New York-New York-NY>]>
+
+In [1]: from apps.dojo_ninjas.models import *
+
+In [2]: ninjas.objects.create(first_name="one_first", last_name="one_last", dojo=dojos.objects.get(id=1))
+Out[2]: <ninjas: 5-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>
+
+In [3]: ninjas.objects.create(first_name="two_first", last_name="two_last", dojo=dojos.objects.get(id=1))
+Out[3]: <ninjas: 6-two_first-two_last-1-CodingDojo Silicon Valley-Mountain View-CA>
+
+In [4]: ninjas.objects.create(first_name="three_first", last_name="three_last", dojo=dojos.objects.get(id=3))
+Out[4]: <ninjas: 7-three_first-three_last-3-CodingDojo New York-New York-NY>
+
+In [5]: ninjas.objects.create(first_name="four_first", last_name="four_last", dojo=dojos.objects.get(id=2))
+Out[5]: <ninjas: 8-four_first-four_last-2-CodingDojo Seattle-Seattle-WA>
+
+In [10]: dojos.objects.all()
+Out[10]: <QuerySet [<dojos: 1-CodingDojo Silicon Valley-Mountain View-CA>, <dojos: 2-CodingDojo Seattle-Seattle-WA>, <dojos: 3-CodingDojo New York-New York-NY>]>
+
+In [11]: ninjas.objects.all()
+Out[11]: <QuerySet [<ninjas: 1-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 2-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 3-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 4-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 5-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 6-two_first-two_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 7-three_first-three_last-3-CodingDojo New York-New York-NY>, <ninjas: 8-four_first-four_last-2-CodingDojo Seattle-Seattle-WA>]>
+
+==================================================================================================
+2.1. Dojo.objects.first().ninjas.all()
+
+In [8]: dojos.objects.first().ninjas.all()
+Out[8]: <QuerySet [<ninjas: 1-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 2-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 3-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 4-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 5-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>, <ninjas: 6-two_first-two_last-1-CodingDojo Silicon Valley-Mountain View-CA>]>
+
+==================================================================================================
+2.2. Ninja.objects.first().dojo
+
+In [9]: ninjas.objects.first().dojo
+Out[9]: <dojos: 1-CodingDojo Silicon Valley-Mountain View-CA>
+
+==================================================================================================
+3. Using Django Shell:
+3.1. Create 3 dojos
+
+In [12]: dojos.objects.create(name="CodingDojo Tulsa", city="Tulsa", state="OK")
+Out[12]: <dojos: 4-CodingDojo Tulsa-Tulsa-OK>
+
+In [13]: dojos.objects.create(name="CodingDojo Dallas", city="Dallas", state="TX")
+Out[13]: <dojos: 5-CodingDojo Dallas-Dallas-TX>
+
+In [14]: dojos.objects.create(name="CodingDojo Chicago", city="Chicago", state="IL")
+Out[14]: <dojos: 6-CodingDojo Chicago-Chicago-IL>
+
+In [15]: dojos.objects.all()
+Out[15]: <QuerySet [<dojos: 1-CodingDojo Silicon Valley-Mountain View-CA>, <dojos: 2-CodingDojo Seattle-Seattle-WA>, <dojos: 3-CodingDojo New York-New York-NY>, <dojos: 4-CodingDojo Tulsa-Tulsa-OK>, <dojos: 5-CodingDojo Dallas-Dallas-TX>, <dojos: 6-CodingDojo Chicago-Chicago-IL>]>
+
+==================================================================================================
+3.2. Delete the three dojos you created (e.g. Dojo.objects.get(id=1).delete())
+
+In [17]: dojos.objects.get(id=1)
+Out[17]: <dojos: 1-CodingDojo Silicon Valley-Mountain View-CA>
+
+In [18]: dojos.objects.get(id=1).delete()
+Out[18]: (7, {u'dojo_ninjas.dojos': 1, u'dojo_ninjas.ninjas': 6})
+
+In [19]: dojos.objects.get(id=1)
+---------------------------------------------------------------------------
+DoesNotExist                              Traceback (most recent call last)
+DoesNotExist: dojos matching query does not exist.
+
+==================================================================================================
+3.3. Create 3 additional dojos by using Dojo.objects.create
+
+In [20]: dojos.objects.create(name="CodingDojo Washington DC", city="Washington", state="DC")
+Out[20]: <dojos: 7-CodingDojo Washington DC-Washington-DC>
+
+In [21]: dojos.objects.create(name="CodingDojo Philadelphia", city="Philadelphia", state="PA")
+Out[21]: <dojos: 8-CodingDojo Philadelphia-Philadelphia-PA>
+
+In [22]: dojos.objects.create(name="CodingDojo Miami", city="Miami", state="FL")
+Out[22]: <dojos: 9-CodingDojo Miami-Miami-FL>
+
+In [23]: dojos.objects.all()
+Out[23]: <QuerySet [<dojos: 2-CodingDojo Seattle-Seattle-WA>, <dojos: 3-CodingDojo New York-New York-NY>, <dojos: 4-CodingDojo Tulsa-Tulsa-OK>, <dojos: 5-CodingDojo Dallas-Dallas-TX>, <dojos: 6-CodingDojo Chicago-Chicago-IL>, <dojos: 7-CodingDojo Washington DC-Washington-DC>, <dojos: 8-CodingDojo Philadelphia-Philadelphia-PA>, <dojos: 9-CodingDojo Miami-Miami-FL>]>
+
+==================================================================================================
+3.4. Create 3 ninjas that belong to the first dojo you created.
+
+In [24]: ninjas.objects.create(first_name="ten1_first", last_name="ten1_last", dojo=dojos.objects.get(id=2))
+Out[24]: <ninjas: 9-ten1_first-ten1_last-2-CodingDojo Seattle-Seattle-WA>
+
+In [26]: ninjas.objects.create(first_name="ten2_first", last_name="ten2_last", dojo=dojos.objects.get(id=3))
+Out[26]: <ninjas: 10-ten2_first-ten2_last-3-CodingDojo New York-New York-NY>
+
+In [27]: ninjas.objects.create(first_name="ten3_first", last_name="ten3_last", dojo=dojos.objects.get(id=3))
+Out[27]: <ninjas: 11-ten3_first-ten3_last-3-CodingDojo New York-New York-NY>
+
+==================================================================================================
+3.5. Create 3 more ninjas and have them belong to the second dojo you created.
+
+In [28]: ninjas.objects.create(first_name="one1_first", last_name="one1_last", dojo=dojos.objects.get(id=4))
+Out[28]: <ninjas: 12-one1_first-one1_last-4-CodingDojo Tulsa-Tulsa-OK>
+
+In [29]: ninjas.objects.create(first_name="one5_first", last_name="one5_last", dojo=dojos.objects.get(id=5))
+Out[29]: <ninjas: 13-one5_first-one5_last-5-CodingDojo Dallas-Dallas-TX>
+
+In [30]: ninjas.objects.create(first_name="one6_first", last_name="one6_last", dojo=dojos.objects.get(id=6))
+Out[30]: <ninjas: 14-one6_first-one6_last-6-CodingDojo Chicago-Chicago-IL>
+
+==================================================================================================
+3.6. Create 3 more ninjas and have them belong to the third dojo you created.
+
+In [32]: ninjas.objects.create(first_name="three7_first", last_name="three7_last", dojo=dojos.objects.get(id=7))
+Out[32]: <ninjas: 15-three7_first-three7_last-7-CodingDojo Washington DC-Washington-DC>
+
+In [33]: ninjas.objects.create(first_name="three8_first", last_name="three8_last", dojo=dojos.objects.get(id=8))
+Out[33]: <ninjas: 16-three8_first-three8_last-8-CodingDojo Philadelphia-Philadelphia-PA>
+
+In [34]: ninjas.objects.create(first_name="three9_first", last_name="three9_last", dojo=dojos.objects.get(id=9))
+Out[34]: <ninjas: 17-three9_first-three9_last-9-CodingDojo Miami-Miami-FL>
+
+==================================================================================================
+3.7. Be able to retrieve all ninjas that belong to the first Dojo
+
+In [37]: dojos.objects.first()
+Out[37]: <dojos: 2-CodingDojo Seattle-Seattle-WA>
+
+In [38]: dojos.objects.first().ninjas.all()
+Out[38]: <QuerySet [<ninjas: 8-four_first-four_last-2-CodingDojo Seattle-Seattle-WA>, <ninjas: 9-ten1_first-ten1_last-2-CodingDojo Seattle-Seattle-WA>]>
+
+==================================================================================================
+3.8. Be able to retrieve all ninjas that belong to the last Dojo
+
+In [41]: dojos.objects.last()
+Out[41]: <dojos: 9-CodingDojo Miami-Miami-FL>
+
+In [42]: dojos.objects.last().ninjas.all()
+Out[42]: <QuerySet [<ninjas: 17-three9_first-three9_last-9-CodingDojo Miami-Miami-FL>]>
+
+==================================================================================================
+4. Add a new field in the Dojo class (found in your models.py) called 'desc'. Allow 'desc' to hold long text (more than 255 characters). To forward engineer the change, run the appropriate migration commands. Successfully run the migration files and check the records to make sure the new field was added successfully.
+
+-------------------------------------
+class dojos(models.Model):
+    name = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    desc = models.TextField(default="n/a")
+
+    def __str__(self):
+        return str(self.id)+'-'+self.name+'-'+self.city+'-'+self.state+'-'+self.desc
+
+class ninjas(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    dojo = models.ForeignKey(dojos, related_name="ninjas")
+
+    def __str__(self):
+        return str(self.id)+'-'+self.first_name+'-'+self.last_name+'-'+str(self.dojo)
+-------------------------------------
+
+*************************************************************
+>python manage.py makemigrations
+Migrations for 'dojo_ninjas':
+  apps/dojo_ninjas/migrations/0002_dojos_desc.py
+    - Add field desc to dojos
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, dojo_ninjas, sessions
+Running migrations:
+  Applying dojo_ninjas.0002_dojos_desc... OK
+*************************************************************
+(djangoEnv) hubbles-imac:assignment wei$ python manage.py shell
+
+In [2]: from apps.dojo_ninjas.models import *
+
+In [3]: dojos.objects.all()
+Out[3]: <QuerySet [<dojos: 2-CodingDojo Seattle-Seattle-WA-n/a>, <dojos: 3-CodingDojo New York-New York-NY-n/a>, <dojos: 4-CodingDojo Tulsa-Tulsa-OK-n/a>, <dojos: 5-CodingDojo Dallas-Dallas-TX-n/a>, <dojos: 6-CodingDojo Chicago-Chicago-IL-n/a>, <dojos: 7-CodingDojo Washington DC-Washington-DC-n/a>, <dojos: 8-CodingDojo Philadelphia-Philadelphia-PA-n/a>, <dojos: 9-CodingDojo Miami-Miami-FL-n/a>]>
+
+In [4]: ninjas.objects.all()
+Out[4]: <QuerySet [<ninjas: 7-three_first-three_last-3-CodingDojo New York-New York-NY-n/a>, <ninjas: 8-four_first-four_last-2-CodingDojo Seattle-Seattle-WA-n/a>, <ninjas: 9-ten1_first-ten1_last-2-CodingDojo Seattle-Seattle-WA-n/a>, <ninjas: 10-ten2_first-ten2_last-3-CodingDojo New York-New York-NY-n/a>, <ninjas: 11-ten3_first-ten3_last-3-CodingDojo New York-New York-NY-n/a>, <ninjas: 12-one1_first-one1_last-4-CodingDojo Tulsa-Tulsa-OK-n/a>, <ninjas: 13-one5_first-one5_last-5-CodingDojo Dallas-Dallas-TX-n/a>, <ninjas: 14-one6_first-one6_last-6-CodingDojo Chicago-Chicago-IL-n/a>, <ninjas: 15-three7_first-three7_last-7-CodingDojo Washington DC-Washington-DC-n/a>, <ninjas: 16-three8_first-three8_last-8-CodingDojo Philadelphia-Philadelphia-PA-n/a>, <ninjas: 17-three9_first-three9_last-9-CodingDojo Miami-Miami-FL-n/a>]>
