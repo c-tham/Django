@@ -1,0 +1,244 @@
+
+for dojo_ninjas
+
+step1
+
+. django1.sh
+*************************************************************
+*************************************************************
+Welcome to Django folders and files readiness
+Version 1.00 - Part 1 (Initial Django files and folders)
+Enter the Project name: assignment
+Enter the App name for the project: dojo_ninjas
+*************************************************************
+*************************************************************
+** [1] Init Django Start Project
+>django-admin startproject assignment
+*************************************************************
+** [2] Create Apps folder in Project folder
+>mkdir assignment/apps
+*************************************************************
+>touch assignment/apps/__init__.py
+*************************************************************
+** [3] Init Django Start App
+>python ../manage.py startapp dojo_ninjas
+*************************************************************
+** [4] Init Django Migration
+*************************************************************
+>python manage.py makemigrations
+No changes detected
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  Applying contenttypes.0001_initial... OK
+  Applying auth.0001_initial... OK
+  Applying admin.0001_initial... OK
+  Applying admin.0002_logentry_remove_auto_add... OK
+  Applying contenttypes.0002_remove_content_type_name... OK
+  Applying auth.0002_alter_permission_name_max_length... OK
+  Applying auth.0003_alter_user_email_max_length... OK
+  Applying auth.0004_alter_user_username_opts... OK
+  Applying auth.0005_alter_user_last_login_null... OK
+  Applying auth.0006_require_contenttypes_0002... OK
+  Applying auth.0007_alter_validators_add_error_messages... OK
+  Applying auth.0008_alter_user_username_max_length... OK
+  Applying sessions.0001_initial... OK
+*************************************************************
+*************************************************************
+** Manual add codes below into  assignment/assignment/settings.py
+(a) Add the line below in the INSTALLED_APPS
+    'apps.dojo_ninjas', ### added this line!
+*************************************************************
+*************************************************************
+** To execute Django, type the command below.
+>python manage.py runserver
+*************************************************************
+*************************************************************
+
+step2
+
+. django1.sh
+*************************************************************
+*************************************************************
+Welcome to Django folders and files readiness
+Version 1.00 - Part 1 (Initial Django files and folders)
+Enter the Project name: assignment
+Enter the App name for the project: book_authors
+*************************************************************
+*************************************************************
+Project 'assignment' is exist! Skip step [1]
+*************************************************************
+Folder of assignment/apps is exist! Skip step [2]
+*************************************************************
+** [3] Init Django Start App
+>python ../manage.py startapp book_authors
+*************************************************************
+** [4] Init Django Migration
+*************************************************************
+>python manage.py makemigrations
+No changes detected
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions
+Running migrations:
+  No migrations to apply.
+*************************************************************
+*************************************************************
+** Manual add codes below into  assignment/assignment/settings.py
+(a) Add the line below in the INSTALLED_APPS
+    'apps.book_authors', ### added this line!
+*************************************************************
+*************************************************************
+** To execute Django, type the command below.
+>python manage.py runserver
+*************************************************************
+*************************************************************
+
+step3
+
+class dojos(models.Model):
+    name = models.CharField(max_length=255)
+    city = models.CharField(max_length=255)
+    state = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    desc = models.TextField(default="n/a")
+
+    def __str__(self):
+        return str(self.id)+'-'+self.name+'-'+self.city+'-'+self.state+'-'+self.desc
+
+class ninjas(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    created_at = models.DateTimeField(auto_now_add = True)
+    updated_at = models.DateTimeField(auto_now = True)
+    dojo = models.ForeignKey(dojos, related_name="ninjas")
+
+    def __str__(self):
+        return str(self.id)+'-'+self.first_name+'-'+self.last_name+'-'+str(self.dojo)
+
+step4
+
+*************************************************************
+>python manage.py makemigrations
+Migrations for 'dojo_ninjas':
+  apps/dojo_ninjas/migrations/0001_initial.py
+    - Create model dojos
+    - Create model ninjas
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, dojo_ninjas, sessions
+Running migrations:
+  Applying dojo_ninjas.0001_initial... OK
+*************************************************************
+
+step5
+
+python manage.py shell
+
+step6
+
+In [1]: from apps.dojo_ninjas.models import *
+
+In [2]: dojos.objects.create(name="CodingDojo Silicon Valley", city="Mountain View", state="CA")
+Out[2]: <dojos: 1-CodingDojo Silicon Valley-Mountain View-CA>
+
+In [3]: dojos.objects.create(name="CodingDojo Seattle", city="Seattle", state="WA")
+Out[3]: <dojos: 2-CodingDojo Seattle-Seattle-WA>
+
+In [4]: dojos.objects.create(name="CodingDojo New York", city="New York", state="NY")
+Out[4]: <dojos: 3-CodingDojo New York-New York-NY>
+
+Step7
+
+In [2]: In [1]: from apps.dojo_ninjas.models import *
+
+In [3]: ninjas.objects.create(first_name="one_first", last_name="one_last", dojo=dojos.objects.get(id=1))
+Out[3]: <ninjas: 2-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA>
+
+In [4]: ninjas.objects.create(first_name="two_first", last_name="two_last", dojo=dojos.objects.get(id=1))
+Out[4]: <ninjas: 3-two_first-two_last-1-CodingDojo Silicon Valley-Mountain View-CA>
+
+In [5]: ninjas.objects.create(first_name="three_first", last_name="three_last", dojo=dojos.objects.get(id=3))
+Out[5]: <ninjas: 4-three_first-three_last-3-CodingDojo New York-New York-NY>
+
+In [6]: ninjas.objects.create(first_name="four_first", last_name="four_last", dojo=dojos.objects.get(id=2))
+Out[6]: <ninjas: 5-four_first-four_last-2-CodingDojo Seattle-Seattle-WA>
+
+In [7]: dojos.objects.create(name="CodingDojo Tulsa", city="Tulsa", state="OK")
+Out[7]: <dojos: 4-CodingDojo Tulsa-Tulsa-OK>
+
+In [8]: dojos.objects.create(name="CodingDojo Dallas", city="Dallas", state="TX")
+Out[8]: <dojos: 5-CodingDojo Dallas-Dallas-TX>
+
+In [9]: dojos.objects.create(name="CodingDojo Chicago", city="Chicago", state="IL")
+Out[9]: <dojos: 6-CodingDojo Chicago-Chicago-IL>
+
+In [10]: dojos.objects.create(name="CodingDojo Washington DC", city="Washington", state="DC")
+Out[10]: <dojos: 7-CodingDojo Washington DC-Washington-DC>
+
+In [11]: dojos.objects.create(name="CodingDojo Philadelphia", city="Philadelphia", state="PA")
+Out[11]: <dojos: 8-CodingDojo Philadelphia-Philadelphia-PA>
+
+In [12]: dojos.objects.create(name="CodingDojo Miami", city="Miami", state="FL")
+Out[12]: <dojos: 9-CodingDojo Miami-Miami-FL>
+
+In [13]: ninjas.objects.create(first_name="ten1_first", last_name="ten1_last", dojo=dojos.objects.get(id=2))
+Out[13]: <ninjas: 6-ten1_first-ten1_last-2-CodingDojo Seattle-Seattle-WA>
+
+In [14]: ninjas.objects.create(first_name="ten2_first", last_name="ten2_last", dojo=dojos.objects.get(id=3))
+Out[14]: <ninjas: 7-ten2_first-ten2_last-3-CodingDojo New York-New York-NY>
+
+In [15]: ninjas.objects.create(first_name="ten3_first", last_name="ten3_last", dojo=dojos.objects.get(id=3))
+Out[15]: <ninjas: 8-ten3_first-ten3_last-3-CodingDojo New York-New York-NY>
+
+In [16]: ninjas.objects.create(first_name="one1_first", last_name="one1_last", dojo=dojos.objects.get(id=4))
+Out[16]: <ninjas: 9-one1_first-one1_last-4-CodingDojo Tulsa-Tulsa-OK>
+
+In [17]: ninjas.objects.create(first_name="one5_first", last_name="one5_last", dojo=dojos.objects.get(id=5))
+Out[17]: <ninjas: 10-one5_first-one5_last-5-CodingDojo Dallas-Dallas-TX>
+
+In [18]: ninjas.objects.create(first_name="one6_first", last_name="one6_last", dojo=dojos.objects.get(id=6))
+Out[18]: <ninjas: 11-one6_first-one6_last-6-CodingDojo Chicago-Chicago-IL>
+
+In [19]: ninjas.objects.create(first_name="three7_first", last_name="three7_last", dojo=dojos.objects.get(id=7))
+Out[19]: <ninjas: 12-three7_first-three7_last-7-CodingDojo Washington DC-Washington-DC>
+
+In [20]: ninjas.objects.create(first_name="three8_first", last_name="three8_last", dojo=dojos.objects.get(id=8))
+Out[20]: <ninjas: 13-three8_first-three8_last-8-CodingDojo Philadelphia-Philadelphia-PA>
+
+In [21]: ninjas.objects.create(first_name="three9_first", last_name="three9_last", dojo=dojos.objects.get(id=9))
+Out[21]: <ninjas: 14-three9_first-three9_last-9-CodingDojo Miami-Miami-FL>
+
+step8
+
+*************************************************************
+>python manage.py makemigrations
+Migrations for 'dojo_ninjas':
+  apps/dojo_ninjas/migrations/0002_dojos_desc.py
+    - Add field desc to dojos
+*************************************************************
+>python manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, dojo_ninjas, sessions
+Running migrations:
+  Applying dojo_ninjas.0002_dojos_desc... OK
+*************************************************************
+
+step9
+
+python manage.py shell
+
+step10
+
+In [1]: from apps.dojo_ninjas.models import *
+
+In [2]: dojos.objects.all()
+Out[2]: <QuerySet [<dojos: 1-CodingDojo Silicon Valley-Mountain View-CA-n/a>, <dojos: 2-CodingDojo Seattle-Seattle-WA-n/a>, <dojos: 3-CodingDojo New York-New York-NY-n/a>, <dojos: 4-CodingDojo Tulsa-Tulsa-OK-n/a>, <dojos: 5-CodingDojo Dallas-Dallas-TX-n/a>, <dojos: 6-CodingDojo Chicago-Chicago-IL-n/a>, <dojos: 7-CodingDojo Washington DC-Washington-DC-n/a>, <dojos: 8-CodingDojo Philadelphia-Philadelphia-PA-n/a>, <dojos: 9-CodingDojo Miami-Miami-FL-n/a>]>
+
+In [3]: ninjas.objects.all()
+Out[3]: <QuerySet [<ninjas: 1-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA-n/a>, <ninjas: 2-one_first-one_last-1-CodingDojo Silicon Valley-Mountain View-CA-n/a>, <ninjas: 3-two_first-two_last-1-CodingDojo Silicon Valley-Mountain View-CA-n/a>, <ninjas: 4-three_first-three_last-3-CodingDojo New York-New York-NY-n/a>, <ninjas: 5-four_first-four_last-2-CodingDojo Seattle-Seattle-WA-n/a>, <ninjas: 6-ten1_first-ten1_last-2-CodingDojo Seattle-Seattle-WA-n/a>, <ninjas: 7-ten2_first-ten2_last-3-CodingDojo New York-New York-NY-n/a>, <ninjas: 8-ten3_first-ten3_last-3-CodingDojo New York-New York-NY-n/a>, <ninjas: 9-one1_first-one1_last-4-CodingDojo Tulsa-Tulsa-OK-n/a>, <ninjas: 10-one5_first-one5_last-5-CodingDojo Dallas-Dallas-TX-n/a>, <ninjas: 11-one6_first-one6_last-6-CodingDojo Chicago-Chicago-IL-n/a>, <ninjas: 12-three7_first-three7_last-7-CodingDojo Washington DC-Washington-DC-n/a>, <ninjas: 13-three8_first-three8_last-8-CodingDojo Philadelphia-Philadelphia-PA-n/a>, <ninjas: 14-three9_first-three9_last-9-CodingDojo Miami-Miami-FL-n/a>]>
