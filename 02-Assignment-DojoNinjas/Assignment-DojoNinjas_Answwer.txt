@@ -9,7 +9,7 @@
 
 ==================================================================================================
 2. Create appropriate tables/models that allows you to perform tasks such as
-(assignment -> apps -> user_login -> models.py)
+(assignment -> apps -> dojo_ninjas -> models.py)
 -------------------------------------
 
 class dojos(models.Model):
@@ -30,7 +30,7 @@ class ninjas(models.Model):
     dojo = models.ForeignKey(dojos, related_name="ninjas")
 
     def __str__(self):
-        return str(self.id)+'-'+self.first_name+'-'+self.last_name+'-'+self.dojo
+        return str(self.id)+'-'+self.first_name+'-'+self.last_name+'-'+str(self.dojo)
 
 -------------------------------------
 python manage.py shell
