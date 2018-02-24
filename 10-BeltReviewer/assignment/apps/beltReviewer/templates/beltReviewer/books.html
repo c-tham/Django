@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{{name}}</title>
+    {% load static %}
+    <!-- The line above tells Django to be ready to listen for static files -->
+    <link rel='stylesheet' href='{% static 'beltReviewer/css/styles.css' %}' media='screen' title='no title'  charset='utf-8'>
+    <!-- Put the static files in the static folder inside your app. -->
+    <!-- Django collects files within all static folders and puts them within a single folder --> 
+</head>
+<body>
+    <div id="container">
+        <div class="top">
+            <h1>Welcome to Dashboard</h1>
+            <div class="row">
+                <div class="col-left">
+                    <h3>Hello {{name}},</h3>
+                </div>
+                <div class="col-right1">
+                    <a href="/books/add">Add Book and Review</a>
+                </div>
+                <div class="col-right2">
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+            <p></p>
+            <div id="list">
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Password</th>
+                        <th>Created At</th>
+                        <th>Updated At</th>
+                    </tr>
+                    {% for all_list in all_users %}
+                    <tr>
+                        <td>{{ all_list.id }}</td>
+                        <td>{{ all_list.first_name }} {{ all_list.last_name }}</td>
+                        <td>{{ all_list.email_address }}</td>
+                        <td>{{ all_list.password }}</td>
+                        <td>{{ all_list.created_at }}</td>
+                        <td>{{ all_list.updated_at }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
