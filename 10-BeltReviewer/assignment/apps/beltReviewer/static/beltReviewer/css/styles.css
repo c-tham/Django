@@ -9,18 +9,45 @@
     display: inline-block;
     width: 100%
 }
-.col-left {
+.box-left {
+    width: 45%;
+    margin-top: 0px;
+    display: inline-block;
+    vertical-align: top;
+}
+.box-right {
+    width: 45%;
+    margin-top: 0px;
+    display: inline-block;
+    vertical-align: top;
+}
+.col-left1 {
+    width: 60%;
+    margin-top: 0px;
+    display: inline-block;
+}
+.col-right {
+    width: 65%;
+    margin-top: 0px;
+    display: inline-block;
+}
+.col-left1 {
     width: 60%;
     margin-top: 0px;
     display: inline-block;
 }
 .col-right1 {
-    width: 25%;
+    width: 8%;
     margin-top: 0px;
     display: inline-block;
 }
 .col-right2 {
-    width: 10%;
+    width: 20%;
+    margin-top: 0px;
+    display: inline-block;
+}
+.col-right3 {
+    width: 8%;
     margin-top: 0px;
     display: inline-block;
 }
@@ -37,4 +64,5 @@ table {
 }
 table, th, td {
     border: 1px solid black;
+    text-align: center;
 }

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Belth Reviewer - Users</title>
+    {% load static %}
+    <!-- The line above tells Django to be ready to listen for static files -->
+    <link rel='stylesheet' href='{% static 'beltReviewer/css/styles.css' %}' media='screen' title='no title'  charset='utf-8'>
+    <!-- Put the static files in the static folder inside your app. -->
+    <!-- Django collects files within all static folders and puts them within a single folder --> 
+</head>
+<body>
+    <div id="container">
+        <div class="top">
+            <h1>Welcome to Dashboard - Add Book and Review</h1>
+            <div class="row">
+                <div class="col-left1">
+                    <h3>Hello {{name}},</h3>
+                </div>
+                <div class="col-right1">
+                    <a href="/books">Home</a>
+                </div>
+                <div class="col-right3">
+                    <a href="/logout">Logout</a>
+                </div>
+            </div>
+            <p></p>
+            <div id="addbookreview">
+                <form action="/addbookreview" method="post">
+                    {% csrf_token %}
+                    <h2>Add a new book title and a review</h2>
+                    <div class="row">
+                        <div class="col-left">1. Book Title:</div>
+                        <div class="col-right">
+                            <input type='text' name='title'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-left">2. Author: (add a new author)</div>
+                        <div class="col-right">
+                            <input type='text' name='author'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-left">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;(or choose from the list)</div>
+                        <div class="col-right">
+                            <input type='text' name='authorlist'>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-left">3. Review:</div>
+                        <div class="col-right">
+                            <textarea rows="3" cols="60" name="review"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-left">4. Rating:</div>
+                        <div class="col-right">
+                            <select name="rating" id="rating">
+                                <option value="1" selected>&#9733;&#9734;&#9734;&#9734;&#9734;</option>
+                                <option value="2">&#9733;&#9733;&#9734;&#9734;&#9734;</option>
+                                <option value="3">&#9733;&#9733;&#9733;&#9734;&#9734;</option>
+                                <option value="4">&#9733;&#9733;&#9733;&#9733;&#9734;</option>
+                                <option value="5">&#9733;&#9733;&#9733;&#9733;&#9733;</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-left1"></div>
+                        <div class="col-right2">
+                            <input type="submit" value="Add Book and Review">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

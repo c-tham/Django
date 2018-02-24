@@ -7,7 +7,7 @@ from django.shortcuts import render
 from django.shortcuts import render, HttpResponse, redirect
 
 from django.contrib import messages
-from .models import User
+from .models import *
  
 def index(request):
     print "* index"
@@ -26,8 +26,18 @@ def registration(request):
                 messages.error(request, error, extra_tags=tag)
             return redirect('/')
         else:
+            c1 = User.objects.filter(email_address=request.POST.get('emailaddress'))
+            if len(c1) > 0:
+                errors["Found"] = "Email already in our system."
+                for tag, error in errors.iteritems():
+                    messages.error(request, error, extra_tags=tag)
+                return redirect('/')
+            ###
             User.objects.create(first_name=request.POST.get('firstname'), last_name=request.POST.get('lastname'), email_address=request.POST.get('emailaddress'), password=request.POST.get('password1'))
-            request.session['name'] = request.POST.get('firstname')
+            ###
+            c2 = User.objects.get(email_address=request.POST.get('emailaddress'))
+            request.session['name'] = c2.first_name
+            request.session['id'] = c2.id
             return redirect('/books')
     return redirect('/')
 
@@ -56,6 +66,7 @@ def login(request):
             else:
                 request.session['key'] = temp_t
                 request.session['name'] = c2.first_name
+                request.session['id'] = c2.id
                 return redirect('/books')
     return redirect('/')
 
@@ -67,8 +78,62 @@ def books(request):
     print "* books"
     if 'key' not in request.session:
         return redirect('/')
+    b = Book.objects.all()
+    r = Review.objects.all().order_by('-created_at')[:3]
+    print r
     context = {
-        "all_users" : User.objects.all(),
-        "name"      : request.session['name']
+        "book_list"   : b,
+        "review_list" : r,
+        "name"        : request.session['name']
     }
     return render(request, "beltReviewer/books.html", context)
+
+def add(request):
+    print "* add"
+    if 'key' not in request.session:
+        return redirect('/')
+    context = {
+        "name"      : request.session['name']
+    }
+    return render(request, "beltReviewer/add.html", context)
+
+def users(request, id):
+    print "* users"
+    if 'key' not in request.session:
+        return redirect('/')
+    r = Review.objects.filter(user=id)
+    context = {
+        "all_users"   : User.objects.filter(id=id),
+        "all_reviews" : r,
+        "cnt_reviews" : len(r),
+        "name"        : request.session['name'],
+    }
+    print r
+    return render(request, "beltReviewer/users.html", context)
+
+def addbookreview(request):
+    print "* addbookreview"
+    if 'key' not in request.session:
+        return redirect('/')
+    errors = {}
+    user=User.objects.get(id=request.session['id'])
+    title = request.POST.get('title')
+    if len(title) < 2:
+        errors["title"] = "Title should be more than 2 characters"
+    author = request.POST.get('author')
+    if len(author) < 2:
+        errors["author"] = "Author should be more than 2 characters"
+    review = request.POST.get('review')
+    if len(review) < 2:
+        errors["review"] = "Review should be more than 2 characters"
+    rating = request.POST.get('rating')
+    if len(errors):
+        for tag, error in errors.iteritems():
+            messages.error(request, error, extra_tags=tag)
+        return redirect('books/add')
+    ###
+    a = Author.objects.create(author=author)
+    b = Book.objects.create(title=title,author=a)
+    c = Review.objects.create(comment=review, book=b, rating=rating, user=user)
+    return redirect('/books')
+

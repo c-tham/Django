@@ -31,8 +31,8 @@ class UserManager(models.Manager):
 
     def login_validator(self, postData):
         errors = {}
-        if len(postData['email']) < 8:
-            errors["email"] = "Login Email address should be more than 8 characters"
+        if len(postData['email']) < 7:
+            errors["email"] = "Login Email address should be more than 7 characters"
         elif not EMAIL_REGEX.match(postData['email']):
             errors["email"] = "Login Email should be a valid email address"
         if len(postData['password']) < 8:
@@ -61,8 +61,8 @@ class Book(models.Model):
     updated_at = models.DateTimeField(auto_now = True)
 
 class Review(models.Model):
-    comments = models.CharField(max_length=255)
-    rating = models.IntegerField()
+    comment = models.CharField(max_length=255)
+    rating = models.CharField(max_length=1)
     user = models.ForeignKey(User, related_name="users")
     book = models.ForeignKey(Book, related_name="books")
     created_at = models.DateTimeField(auto_now_add = True)
