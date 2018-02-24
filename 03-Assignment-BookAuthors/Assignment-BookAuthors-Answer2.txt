@@ -390,20 +390,81 @@ In [129]: a.save()
 
 6.7. For the 3rd book, retrieve all the authors
 
+In [1]: from apps.book_authors.models import *
+
+In [2]: book.objects.all()
+Out[2]: <QuerySet [<book: 2-C sharp-Book of C sharp-book_authors.author.None>, <book: 3-Java-Book of Java-book_authors.author.None>, <book: 4-Python-Book of Python-book_authors.author.None>, <book: 5-PHP-Book of PHP-book_authors.author.None>, <book: 6-C#-book of C#-book_authors.author.None>]>
+
+In [3]: author.objects.all()
+Out[3]: <QuerySet [<author: 2-Mike-Mike-mike@mike.com--book_authors.book.None>, <author: 3-Speros-Speros-speros@speros.com--book_authors.book.None>, <author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>, <author: 6-Ketul-Ketul-ketul@ketul.com--book_authors.book.None>]>
+
+In [4]: book.objects.get(id=4)
+Out[4]: <book: 4-Python-Book of Python-book_authors.author.None>
+
+In [8]: book.objects.get(id=4).authors
+Out[8]: <django.db.models.fields.related_descriptors.ManyRelatedManager at 0x1040b3cd0>
+
+In [9]: book.objects.get(id=4).authors.all()
+Out[9]: <QuerySet [<author: 3-Speros-Speros-speros@speros.com--book_authors.book.None>, <author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>]>
+
 ==================================================================================================
 
 6.8. For the 3rd book, remove the first author
+
+In [10]: book.objects.get(id=4).authors.first()
+Out[10]: <author: 3-Speros-Speros-speros@speros.com--book_authors.book.None>
+
+In [11]: book.objects.get(id=4).authors.first().delete()
+Out[11]: (4, {u'book_authors.author': 1, u'book_authors.author_books': 3})
+
+In [12]: book.objects.get(id=4).authors.all()
+Out[12]: <QuerySet [<author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>]>
 
 ==================================================================================================
 
 6.9. For the 2nd book, add the 5th author as one of the authors
 
+In [15]: book.objects.all()
+Out[15]: <QuerySet [<book: 2-C sharp-Book of C sharp-book_authors.author.None>, <book: 3-Java-Book of Java-book_authors.author.None>, <book: 4-Python-Book of Python-book_authors.author.None>, <book: 5-PHP-Book of PHP-book_authors.author.None>, <book: 6-C#-book of C#-book_authors.author.None>]>
+
+In [16]: book.objects.get(id=3)
+Out[16]: <book: 3-Java-Book of Java-book_authors.author.None>
+
+In [17]: book.objects.get(id=3).authors.all()
+Out[17]: <QuerySet [<author: 2-Mike-Mike-mike@mike.com--book_authors.book.None>, <author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>]>
+
+In [18]: author.objects.all()
+Out[18]: <QuerySet [<author: 2-Mike-Mike-mike@mike.com--book_authors.book.None>, <author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>, <author: 6-Ketul-Ketul-ketul@ketul.com--book_authors.book.None>]>
+
+In [22]: a = author.objects.get(id=6)
+
+In [23]: b = book.objects.get(id=3)
+
+In [24]: a.books.add(b)
+
+In [26]: a.save()
+
+In [27]: book.objects.get(id=3).authors.all()
+Out[27]: <QuerySet [<author: 2-Mike-Mike-mike@mike.com--book_authors.book.None>, <author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>, <author: 6-Ketul-Ketul-ketul@ketul.com--book_authors.book.None>]>
+
 ==================================================================================================
 
 6.10. Find all the books that the 3rd author is part of
 
+In [28]: author.objects.all()
+Out[28]: <QuerySet [<author: 2-Mike-Mike-mike@mike.com--book_authors.book.None>, <author: 4-John-John-john@john.com--book_authors.book.None>, <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>, <author: 6-Ketul-Ketul-ketul@ketul.com--book_authors.book.None>]>
+
+In [29]: author.objects.get(id=5)
+Out[29]: <author: 5-Jadee-Jadee-jadee@jadee.com--book_authors.book.None>
+
+In [30]: author.objects.get(id=5).books.all()
+Out[30]: <QuerySet [<book: 2-C sharp-Book of C sharp-book_authors.author.None>, <book: 3-Java-Book of Java-book_authors.author.None>, <book: 4-Python-Book of Python-book_authors.author.None>, <book: 5-PHP-Book of PHP-book_authors.author.None>, <book: 6-C#-book of C#-book_authors.author.None>]>
+
 ==================================================================================================
 
 6.11. Find all the books that the 2nd author is part of
+
+In [31]: author.objects.get(id=4).books.all()
+Out[31]: <QuerySet [<book: 2-C sharp-Book of C sharp-book_authors.author.None>, <book: 3-Java-Book of Java-book_authors.author.None>, <book: 4-Python-Book of Python-book_authors.author.None>, <book: 5-PHP-Book of PHP-book_authors.author.None>]>
 
 ==================================================================================================
