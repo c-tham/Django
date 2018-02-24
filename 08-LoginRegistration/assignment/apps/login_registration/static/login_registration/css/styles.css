@@ -2,7 +2,7 @@
     outline: 1px dotted red;
 } */
 #container {
-    width: 600px;
+    width: 800px;
     margin: 0px auto;
 }
 .row {
@@ -23,7 +23,7 @@
     /* margin: 0px; */
     margin: 0px 0px 10px;
 }
-.flash_message {
+#flash_message {
     color: red;
     margin: 0px;
 }
