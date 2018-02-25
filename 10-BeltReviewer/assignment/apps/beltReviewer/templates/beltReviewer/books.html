@@ -29,7 +29,26 @@
                 <h3>Recent Book Reviews:</h3>
                 <div class="list">
                     {% for all_books in review_list %}
-                        <p>&nbsp; &nbsp; &nbsp; &nbsp; <a href="books/{{ all_books.book.id }}">{{ all_books.book.title }}</a></p>
+                        <div class="list-details">
+                            <p>&nbsp; <a href="books/{{ all_books.book_id }}">{{ all_books.book.title }}</a></p>
+                            {% if all_books.rating == '1' %}
+                                <p>&nbsp; &nbsp; &nbsp; &nbsp; Rating: &#9733;</p>
+                            {% endif %}
+                            {% if all_books.rating == '2' %}
+                                <p>&nbsp; &nbsp; &nbsp; &nbsp; Rating: &#9733;&#9733;</p>
+                            {% endif %}
+                            {% if all_books.rating == '3' %}
+                                <p>&nbsp; &nbsp; &nbsp; &nbsp; Rating: &#9733;&#9733;&#9733;</p>
+                            {% endif %}
+                            {% if all_books.rating == '4' %}
+                                <p>&nbsp; &nbsp; &nbsp; &nbsp; Rating: &#9733;&#9733;&#9733;&#9733;</p>
+                            {% endif %}
+                            {% if all_books.rating == '5' %}
+                                <p>&nbsp; &nbsp; &nbsp; &nbsp; Rating: &#9733;&#9733;&#9733;&#9733;&#9733;</p>
+                            {% endif %}
+                            <p>&nbsp; &nbsp; &nbsp; &nbsp; <a href="/users/{{ all_books.user.id }}">{{ all_books.user.first_name }}</a>  says: {{ all_books.comment }}</p>
+                            <p>&nbsp; &nbsp; &nbsp; &nbsp; Posted on  {{ all_books.created_at }}</p>
+                        </div>
                     {% endfor %}
                 </div>
             </div>
@@ -37,7 +56,7 @@
                 <h3>Other Books with Reviews:</h3>
                 <div class="list">
                     {% for all_books in book_list %}
-                        &nbsp; &nbsp; &nbsp; &nbsp; {{ all_books }}
+                        <p>&nbsp; &nbsp; &nbsp; &nbsp; <a href="books/{{ all_books.id }}">{{ all_books.title }}</a></p> 
                     {% endfor %}
                 </div>
             </div>

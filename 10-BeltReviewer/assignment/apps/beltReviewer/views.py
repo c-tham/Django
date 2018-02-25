@@ -120,8 +120,8 @@ def addbookreview(request):
     title = request.POST.get('title')
     if len(title) < 2:
         errors["title"] = "Title should be more than 2 characters"
-    author = request.POST.get('author')
-    if len(author) < 2:
+    author_name = request.POST.get('author')
+    if len(author_name) < 2:
         errors["author"] = "Author should be more than 2 characters"
     review = request.POST.get('review')
     if len(review) < 2:
@@ -132,8 +132,40 @@ def addbookreview(request):
             messages.error(request, error, extra_tags=tag)
         return redirect('books/add')
     ###
-    a = Author.objects.create(author=author)
+    a = Author.objects.create(author_name=author_name)
     b = Book.objects.create(title=title,author=a)
     c = Review.objects.create(comment=review, book=b, rating=rating, user=user)
     return redirect('/books')
 
+def bookdetails(request, id):
+    print "* bookdetails"
+    if 'key' not in request.session:
+        return redirect('/')
+    b = Book.objects.get(id=id)
+    r = Review.objects.filter(book=b)
+    request.session['book_id'] = b.id
+    context = {
+        "bookinfo"    : b,
+        "all_reviews" : r,
+        "name"        : request.session['name'],
+    }
+    return render(request, "beltReviewer/bookdetails.html", context)
+
+def addreview(request):
+    print "* addreview"
+    if 'key' not in request.session:
+        return redirect('/')
+    errors = {}
+    book_id = Book.objects.get(id=request.session['book_id'])
+    user=User.objects.get(id=request.session['id'])
+    review = request.POST.get('review')
+    if len(review) < 2:
+        errors["review"] = "Review should be more than 2 characters"
+    rating = request.POST.get('rating')
+    if len(errors):
+        for tag, error in errors.iteritems():
+            messages.error(request, error, extra_tags=tag)
+        return redirect('books/add')
+    ###
+    c = Review.objects.create(comment=review, book=book_id, rating=rating, user=user)
+    return redirect('/books')

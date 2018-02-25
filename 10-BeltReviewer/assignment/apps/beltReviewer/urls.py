@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^books/add$', views.add),
     url(r'^addbookreview$', views.addbookreview),
     url(r'^users/(?P<id>\d+)$', views.users),
+    url(r'^books/(?P<id>\d+)$', views.bookdetails),
+    url(r'^addreview$', views.addreview),
 ]

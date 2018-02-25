@@ -50,13 +50,13 @@ class User(models.Model):
     objects = UserManager()
 
 class Author(models.Model):
-    author = models.CharField(max_length=255)
+    author_name = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 
 class Book(models.Model):
     title = models.CharField(max_length=255)
-    author = models.ForeignKey(Author, related_name="books")
+    author = models.ForeignKey(Author, related_name="authors")
     created_at = models.DateTimeField(auto_now_add = True)
     updated_at = models.DateTimeField(auto_now = True)
 

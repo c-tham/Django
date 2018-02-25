@@ -54,9 +54,9 @@
             </div>
             <p></p>
             <h3>Posted Review on the following books:</h3>
-            <div id="books">
+            <div>
                 {% for all_books in all_reviews %}
-                    &nbsp; &nbsp; &nbsp; &nbsp; <a href="books/{{ all_books.book.id }}">{{ all_books.book.title }}</a></p>
+                    &nbsp; &nbsp; &nbsp; &nbsp; <a href="/books/{{ all_books.book.id }}">{{ all_books.book.title }}</a></p>
                 {% endfor %}
             </div>
         </div>
