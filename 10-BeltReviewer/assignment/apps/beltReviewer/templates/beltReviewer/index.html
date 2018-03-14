@@ -11,10 +11,8 @@
 </head>
 <body>
     <div id="container">
-        <div>
             <h1>Welcome to Belt Reviewer</h1>
             <p></p>
-        </div>
         <div id="flash_message">
             {% if messages %}
                 <ul class="messages">
@@ -24,71 +22,58 @@
                 </ul>
             {% endif %}
         </div>
-        <div id="registration">
-            <form action="/registration" method="post">
-                {% csrf_token %}
-                <h2>Registration Form</h2>
-                <div class="row">
-                    <div class="col-left">Your Email:</div>
-                    <div class="col-right">
-                        <input type='text' name='emailaddress'>
+        <div class="row">
+            <div class="box-left">
+                <form action="/registration" method="post">
+                    {% csrf_token %}
+                    <h2>Registration Form</h2>
+                    <div class="row">
+                        <div class="col-left">Your Email:</div>
+                        <div class="col-right"><input type='text' name='emailaddress'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left">Your First Name:</div>
-                    <div class="col-right">
-                        <input type='text' name='firstname'>
+                    <div class="row">
+                        <div class="col-left">Your First Name:</div>
+                        <div class="col-right"><input type='text' name='firstname'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left">Your Last Name:</div>
-                    <div class="col-right">
-                        <input type='text' name='lastname'>
+                    <div class="row">
+                        <div class="col-left">Your Last Name:</div>
+                        <div class="col-right"><input type='text' name='lastname'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left">Your Password:</div>
-                    <div class="col-right">
-                        <input type='text' name='password1'>
+                    <div class="row">
+                        <div class="col-left">Your Password:</div>
+                        <div class="col-right"><input type='password' name='password1'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left">Confirm Password:</div>
-                    <div class="col-right">
-                        <input type='text' name='password2'>
+                    <div class="row">
+                        <div class="col-left">Confirm Password:</div>
+                        <div class="col-right"><input type='password' name='password2'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left"></div>
-                    <div class="col-right">
-                        <input type="submit" value="Register">
+                    <div class="row">
+                        <div class="col-left"></div>
+                        <div class="col-right"><input type="submit" value="Register"></div>
                     </div>
-                </div>
-            </form>
-        </div>
-        <div id="login">
-            <form action="/login" method="post">
-                {% csrf_token %}
-                <h2>Login Form</h2>
-                <div class="row">
-                    <div class="col-left">Your Email:</div>
-                    <div class="col-right">
-                        <input type='text' name='email'>
+                </form>
+            </div>
+            <div class="box-middle">
+                <p></p>
+            </div>
+            <div class="box-right">
+                <form action="/login" method="post">
+                    {% csrf_token %}
+                    <h2>Login Form</h2>
+                    <div class="row">
+                        <div class="col-left">Your Email:</div>
+                        <div class="col-right"><input type='text' name='email'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left">Your Password:</div>
-                    <div class="col-right">
-                        <input type='text' name='password'>
+                    <div class="row">
+                        <div class="col-left">Your Password:</div>
+                        <div class="col-right"><input type='password' name='password'></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-left"></div>
-                    <div class="col-right">
-                        <input type="submit" value="Login">
+                    <div class="row">
+                        <div class="col-left"></div>
+                        <div class="col-right"><input type="submit" value="Login"></div>
                     </div>
-                </div>
-            </form>
+                </form>
+            </div>
         </div>
     </div>
 </body>

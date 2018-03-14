@@ -14,13 +14,14 @@
         <div class="top">
             <h1>Welcome to Dashboard - Main</h1>
             <div class="row">
-                <div class="col-left1">
+                <div class="col-one">
                     <h3>Hello <a href="/users/{{request.session.id}}">{{name}}</a>,</h3>
                 </div>
-                <div class="col-right2">
+                <div class="col-two"><p></p></div>
+                <div class="col-three">
                     <a href="/books/add">Add Book and Review</a>
                 </div>
-                <div class="col-right3">
+                <div class="col-four">
                     <a href="/logout">Logout</a>
                 </div>
             </div>
@@ -51,6 +52,9 @@
                         </div>
                     {% endfor %}
                 </div>
+            </div>
+            <div class="box-middle">
+                <p></p>
             </div>
             <div class="box-right">
                 <h3>Other Books with Reviews:</h3>
